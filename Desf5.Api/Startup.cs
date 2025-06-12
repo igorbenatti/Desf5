@@ -33,7 +33,7 @@ namespace Desf5.Api
                 c.SwaggerDoc("v1", new OpenApiInfo
                 {
                     Title = Configuration["ApiDocTitle"],
-                    Description = "DESF5 - Atividade do Desafio Final",
+                    Description = "2025-4A - POS - Bootcamp Arquiteto(a) de Software | Atividade do Desafio Final",
                     Version = "v1"
                 });
 

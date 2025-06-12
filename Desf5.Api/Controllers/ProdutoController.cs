@@ -24,6 +24,109 @@ public class ProdutoController : ControllerBase
         _service = service;
     }
 
+    /// <summary>Adicionar produto</summary>
+    /// <remarks>
+    /// Exemplo:
+    ///
+    ///     POST
+    ///     {
+    ///        "nome": "string",
+    ///        "descricao": "string",
+    ///        "preco": 0,
+    ///        "quantidadeEmEstoque": 0
+    ///     }
+    ///
+    /// </remarks>
+    /// <param name="request"></param>
+    /// <response code="201">Created</response>
+    /// <response code="400">BadRequest</response>
+    [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.Created)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
+    [HttpPost()]
+    public async Task<ActionResult> Adicionar([FromBody] CadastrarRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogError("ProdutoController :: Adicionar -> ErrorMessage: Modelo inválido");
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            return StatusCode((int)HttpStatusCode.Created, await _service.Adicionar(request));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ProdutoController :: Adicionar -> ExMessage: {mensagem}", ex.Message);
+            return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>Alterar produto</summary>
+    /// <remarks>
+    /// Exemplo:
+    ///
+    ///     PUT
+    ///     {
+    ///        "nome": "string",
+    ///        "descricao": "string",
+    ///        "preco": 0,
+    ///        "quantidadeEmEstoque": 0
+    ///     }
+    ///
+    /// </remarks>
+    /// <param name="id">Identificador do produto</param>
+    /// <param name="request"></param>
+    /// <response code="200">OK</response>
+    /// <response code="400">BadRequest</response>
+    [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Alterar(int id, [FromBody] AlterarRequest request)
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogError("ProdutoController :: Alterar -> ErrorMessage: Modelo inválido");
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            return StatusCode((int)HttpStatusCode.OK, await _service.Alterar(id, request));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ProdutoController :: Alterar -> ExMessage: {mensagem}", ex.Message);
+            return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>Remover produto</summary>
+    /// <param name="id">Identificador do produto</param>
+    /// <response code="200">OK</response>
+    /// <response code="400">BadRequest</response>
+    [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
+    [HttpDelete()]
+    public async Task<ActionResult> Remover(int id)
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogError("ProdutoController :: Remover -> ErrorMessage: Modelo inválido");
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            return StatusCode((int)HttpStatusCode.OK, await _service.Remover(id));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ProdutoController :: Remover -> ExMessage: {mensagem}", ex.Message);
+            return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
+        }
+    }
+
     /// <summary>Consultar todos produtos</summary>
     /// <response code="200">OK</response>
     /// <response code="400">BadRequest</response>
