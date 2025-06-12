@@ -59,7 +59,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("{id: int}")]
+    [HttpGet("{id}")]
     public async Task<ActionResult> GetById(int id)
     {
         if (!ModelState.IsValid)
@@ -89,7 +89,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(List<Produto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("{nome}")]
+    [HttpGet("nome/{nome}")]
     public async Task<ActionResult> GetByName(string nome)
     {
         if (!ModelState.IsValid)
@@ -109,6 +109,33 @@ public class ProdutoController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError("ProdutoController :: GetByName -> ExMessage: {mensagem}", ex.Message);
+            return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
+        }
+    }
+
+    /// <summary>Consultar quantidade de produtos cadastrados</summary>
+    /// <response code="200">OK</response>
+    /// <response code="400">BadRequest</response>
+    [ProducesResponseType(typeof(int), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
+    [HttpGet("contador")]
+    public async Task<ActionResult> Count()
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogError("ProdutoController :: Count -> ErrorMessage: Modelo inválido");
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var response = await _service.GetAll();
+
+            return StatusCode((int)HttpStatusCode.OK, response != null ? response.Count : 0);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ProdutoController :: Count -> ExMessage: {mensagem}", ex.Message);
             return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
         }
     }

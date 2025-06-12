@@ -34,7 +34,7 @@ namespace Desf5.Api
                 {
                     Title = Configuration["ApiDocTitle"],
                     Description = "DESF5 - Atividade do Desafio Final",
-                    Version = "DESF5"
+                    Version = "v1"
                 });
 
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
@@ -75,7 +75,7 @@ namespace Desf5.Api
             app.UseSwagger();
             app.UseSwaggerUI(s =>
             {
-                s.SwaggerEndpoint($"/swagger/v1/swagger.json", "DESF5");
+                s.SwaggerEndpoint($"/swagger/v1/swagger.json", "v1");
                 s.DefaultModelsExpandDepth(-1);
                 s.DocExpansion(Swashbuckle.AspNetCore.SwaggerUI.DocExpansion.List);
                 s.RoutePrefix = string.Empty;
