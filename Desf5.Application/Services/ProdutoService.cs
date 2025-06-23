@@ -25,6 +25,11 @@ public class ProdutoService : IProdutoService
     {
         try
         {
+            Produto produtoExistente = await _repository.ConsultarProdutoPorNome(request.nome);
+
+            if (produtoExistente != null)
+                throw new FormatException($"Já existe um produto cadastrado com o nome informado [{request.nome}]");
+
             Produto novoProduto = new()
             {
                 Nome = request.nome,
@@ -48,9 +53,8 @@ public class ProdutoService : IProdutoService
             Produto produto = await _repository.GetById(id);
 
             if (produto == null)
-                throw new FormatException($"Produto [{id}] não encontrado");
+                throw new FormatException($"Produto informado [{id}] não encontrado");
 
-            produto.Nome = !string.IsNullOrEmpty(request.nome) ? request.nome : produto.Nome;
             produto.Descricao = !string.IsNullOrEmpty(request.descricao) ? request.descricao : produto.Descricao;
             
             if (request.preco != null)

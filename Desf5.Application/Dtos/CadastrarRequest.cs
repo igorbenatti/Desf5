@@ -5,6 +5,12 @@ namespace Desf5.Application.Dtos;
 
 public class CadastrarRequest
 {
+    public CadastrarRequest(string nome, string descricao)
+    {
+        this.nome = nome.Trim();
+        this.descricao = descricao.Trim();
+    }
+
     [Display(Name = "Nome do produto")]
     [StringLength(100, ErrorMessage = "Nome do produto deve conter no máximo 100 caracteres")]
     [Required(ErrorMessage = "Nome do produto deve ser informado")]

@@ -68,7 +68,6 @@ public class ProdutoController : ControllerBase
     ///
     ///     PUT
     ///     {
-    ///        "nome": "string",
     ///        "descricao": "string",
     ///        "preco": 0,
     ///        "quantidadeEmEstoque": 0
@@ -81,7 +80,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpPut("{id}")]
+    [HttpPut("{id:int}")]
     public async Task<ActionResult> Alterar(int id, [FromBody] AlterarRequest request)
     {
         if (!ModelState.IsValid)
@@ -162,7 +161,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("{id}")]
+    [HttpGet("{id:int}")]
     public async Task<ActionResult> GetById(int id)
     {
         if (!ModelState.IsValid)
@@ -192,7 +191,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(List<Produto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("nome/{nome}")]
+    [HttpGet("{nome}")]
     public async Task<ActionResult> GetByName(string nome)
     {
         if (!ModelState.IsValid)

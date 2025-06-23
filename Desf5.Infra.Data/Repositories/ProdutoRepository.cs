@@ -21,6 +21,20 @@ public class ProdutoRepository : IProdutoRepository
         _logger = logger;
         _desf5DbContext = desf5DbContext;
     }
+
+    public async Task<Produto> ConsultarProdutoPorNome(string nome)
+    {
+        try
+        {
+            return await _desf5DbContext.Produto.Where(x => x.Nome.ToLower().Equals(nome.ToLower())).AsNoTracking().FirstOrDefaultAsync();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro no método ConsultarProdutoPorNome");
+            throw;
+        }
+    }
+
     public async Task<Produto> GerenciarProduto(Acao acao, Produto produto)
     {
         try
