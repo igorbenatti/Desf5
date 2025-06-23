@@ -7,13 +7,13 @@ namespace Desf5.Domain.Interfaces;
 
 public interface IProdutoRepository
 {
-    Task<Produto> ConsultarProdutoPorNome(string nome);
-
     Task<Produto> GerenciarProduto(Acao acao, Produto produto);
 
     Task<List<Produto>> GetAll();
 
     Task<Produto> GetById(int id);
+
+    Task<Produto> GetByEan(int ean);
 
     Task<List<Produto>> GetByName(string nome);
 }

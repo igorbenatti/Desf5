@@ -5,10 +5,15 @@ namespace Desf5.Application.Dtos;
 
 public class AlterarRequest
 {
-    public AlterarRequest(string descricao)
+    public AlterarRequest(string nome, string descricao)
     {
+        this.nome = !string.IsNullOrEmpty(nome) ? nome.Trim() : nome;
         this.descricao = !string.IsNullOrEmpty(descricao) ? descricao.Trim() : descricao;
     }
+
+    [Display(Name = "Nome do produto")]
+    [StringLength(100, ErrorMessage = "Nome do produto deve conter no máximo 100 caracteres")]
+    public string nome { get; set; }
 
     [Display(Name = "Descrição do produto")]
     [StringLength(200, ErrorMessage = "Descrição do produto deve conter no máximo 200 caracteres")]

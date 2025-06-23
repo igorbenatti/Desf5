@@ -25,13 +25,14 @@ public class ProdutoService : IProdutoService
     {
         try
         {
-            Produto produtoExistente = await _repository.ConsultarProdutoPorNome(request.nome);
+            Produto produtoExistente = await GetByEan(request.ean);
 
             if (produtoExistente != null)
-                throw new FormatException($"Já existe um produto cadastrado com o nome informado [{request.nome}]");
+                throw new FormatException($"Já existe um produto cadastrado com o código EAN informado [{request.ean}]");
 
             Produto novoProduto = new()
             {
+                Ean = request.ean,
                 Nome = request.nome,
                 Descricao = request.descricao,
                 Preco = request.preco,
@@ -55,6 +56,7 @@ public class ProdutoService : IProdutoService
             if (produto == null)
                 throw new FormatException($"Produto informado [{id}] não encontrado");
 
+            produto.Nome = !string.IsNullOrEmpty(request.nome) ? request.nome : produto.Nome;
             produto.Descricao = !string.IsNullOrEmpty(request.descricao) ? request.descricao : produto.Descricao;
             
             if (request.preco != null)
@@ -118,6 +120,21 @@ public class ProdutoService : IProdutoService
         catch (Exception ex)
         {
             _logger.LogError(ex, "Erro no método GetById");
+            throw;
+        }
+    }
+
+    public async Task<Produto> GetByEan(int ean)
+    {
+        try
+        {
+            Produto produto = await _repository.GetByEan(ean);
+
+            return produto != null ? produto : null;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro no método GetByEan");
             throw;
         }
     }

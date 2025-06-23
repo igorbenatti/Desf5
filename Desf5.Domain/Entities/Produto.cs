@@ -8,6 +8,8 @@ public class Produto
     [Key]
     public int Id { get; set; }
 
+    public int Ean { get; set; }
+
     public string Nome { get; set; }
 
     public string Descricao { get; set; }

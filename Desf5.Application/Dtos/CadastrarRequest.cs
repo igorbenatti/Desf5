@@ -11,6 +11,11 @@ public class CadastrarRequest
         this.descricao = descricao.Trim();
     }
 
+    [Display(Name = "Código EAN do produto")]
+    [StringLength(13, ErrorMessage = "Código EAN do produto deve conter no máximo 13 caracteres")]
+    [Required(ErrorMessage = "Código EAN do produto deve ser informado")]
+    public int ean { get; set; }
+
     [Display(Name = "Nome do produto")]
     [StringLength(100, ErrorMessage = "Nome do produto deve conter no máximo 100 caracteres")]
     [Required(ErrorMessage = "Nome do produto deve ser informado")]

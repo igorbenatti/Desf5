@@ -17,5 +17,7 @@ public interface IProdutoService
 
     Task<Produto> GetById(int id);
 
+    Task<Produto> GetByEan(int ean);
+
     Task<List<Produto>> GetByName(string nome);
 }

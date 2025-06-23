@@ -22,19 +22,6 @@ public class ProdutoRepository : IProdutoRepository
         _desf5DbContext = desf5DbContext;
     }
 
-    public async Task<Produto> ConsultarProdutoPorNome(string nome)
-    {
-        try
-        {
-            return await _desf5DbContext.Produto.Where(x => x.Nome.ToLower().Equals(nome.ToLower())).AsNoTracking().FirstOrDefaultAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Erro no método ConsultarProdutoPorNome");
-            throw;
-        }
-    }
-
     public async Task<Produto> GerenciarProduto(Acao acao, Produto produto)
     {
         try
@@ -78,6 +65,19 @@ public class ProdutoRepository : IProdutoRepository
         try
         {
             return await _desf5DbContext.Produto.FirstOrDefaultAsync(x => x.Id.Equals(id));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro no método GetById");
+            throw;
+        }
+    }
+
+    public async Task<Produto> GetByEan(int ean)
+    {
+        try
+        {
+            return await _desf5DbContext.Produto.FirstOrDefaultAsync(x => x.Ean.Equals(ean));
         }
         catch (Exception ex)
         {

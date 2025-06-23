@@ -30,6 +30,7 @@ public class ProdutoController : ControllerBase
     ///
     ///     POST
     ///     {
+    ///        "ean": 0,
     ///        "nome": "string",
     ///        "descricao": "string",
     ///        "preco": 0,
@@ -68,6 +69,7 @@ public class ProdutoController : ControllerBase
     ///
     ///     PUT
     ///     {
+    ///        "nome": "string",
     ///        "descricao": "string",
     ///        "preco": 0,
     ///        "quantidadeEmEstoque": 0
@@ -106,7 +108,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(bool), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpDelete()]
+    [HttpDelete("{id:int}")]
     public async Task<ActionResult> Remover(int id)
     {
         if (!ModelState.IsValid)
@@ -161,7 +163,7 @@ public class ProdutoController : ControllerBase
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("{id:int}")]
+    [HttpGet("id/{id:int}")]
     public async Task<ActionResult> GetById(int id)
     {
         if (!ModelState.IsValid)
@@ -185,13 +187,43 @@ public class ProdutoController : ControllerBase
         }
     }
 
+    /// <summary>Consultar produto por código EAN</summary>
+    /// <param name="ean">Código EAN do produto</param>
+    /// <response code="200">OK</response>
+    /// <response code="400">BadRequest</response>
+    [ProducesResponseType(typeof(Produto), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
+    [HttpGet("ean/{ean:int}")]
+    public async Task<ActionResult> GetByEan(int ean)
+    {
+        if (!ModelState.IsValid)
+        {
+            _logger.LogError("ProdutoController :: GetByEan -> ErrorMessage: Modelo inválido");
+            return BadRequest(ModelState);
+        }
+
+        try
+        {
+            var response = await _service.GetByEan(ean);
+
+            return response != null
+                ? StatusCode((int)HttpStatusCode.OK, response)
+                : StatusCode((int)HttpStatusCode.NoContent);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError("ProdutoController :: GetByEan -> ExMessage: {mensagem}", ex.Message);
+            return StatusCode((int)HttpStatusCode.BadRequest, new Response { status = (int)HttpStatusCode.BadRequest, isvalid = false, message = ex.Message });
+        }
+    }
+
     /// <summary>Consultar produto por nome</summary>
     /// <param name="nome">Nome do produto</param>
     /// <response code="200">OK</response>
     /// <response code="400">BadRequest</response>
     [ProducesResponseType(typeof(List<Produto>), (int)HttpStatusCode.OK)]
     [ProducesResponseType(typeof(Response), (int)HttpStatusCode.BadRequest)]
-    [HttpGet("{nome}")]
+    [HttpGet("nome/{nome}")]
     public async Task<ActionResult> GetByName(string nome)
     {
         if (!ModelState.IsValid)
